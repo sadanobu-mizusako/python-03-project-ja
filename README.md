@@ -5,7 +5,7 @@
 - リポジトリをクローンまたはダウンロードしてください。
 - リポジトリをクローンまたはダウンロードしてください。
 ```
-https://github.com/sadanobu-mizusako/python-02-project-ja
+https://github.com/sadanobu-mizusako/python-03-project-ja
 ```
 
 ## API認証情報の取得
