@@ -3,7 +3,6 @@
 - [Python公式サイト](https://www.python.org/downloads/)からインストールしてください。
 ## プロジェクトのクローンまたはダウンロード:
 - リポジトリをクローンまたはダウンロードしてください。
-- リポジトリをクローンまたはダウンロードしてください。
 ```
 https://github.com/sadanobu-mizusako/python-03-project-ja
 ```
@@ -46,7 +45,7 @@ python main.py
 
 ## データフローの概要
 ER図に記載されたテーブルはそれぞれ以下のデータフローにより作成されています。
-![](./data_flow.png)
+![](./data_flow.PNG)
 ## データソース
 guestsとholidaysにはそれぞれ異なるAPIを使用しています。
 ### guests
