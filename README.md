@@ -14,11 +14,18 @@ https://github.com/sadanobu-mizusako/python-03-project-ja
 - 一般利用者はご自身でRESASの[Webサイト](https://opendata.resas-portal.go.jp/form.html)から申請を行い認証キーを取得してください。
 
 ## config.iniの設定
-config.iniは、以下のような構成としてください。
+本プログラムを実行する前に、認証情報を記述したconfig.iniファイルを用意する必要があります。config.iniは、以下のような構成としてください。
 ```
 [RESAS]
 API_KEY = YOUR_API_KEY
 ```
+YOUR_API_KEYには、ご自身で取得された認証キーを記載ください。
+
+また、main.py中の10行名では、
+```python
+con.read("../../config.ini") # config情報を格納しているpathを指定してください。
+```
+により、config.iniを読み込んでいますので、必要に応じてパスを変更してください。
 
 ## プログラムの実行
 - 以下のコマンドでプログラムを実行します。
@@ -34,9 +41,12 @@ python main.py
     - 連休の有無、祝日が土日と重なった際、宿泊者数がどう変化するのか予測したい
     - 等
 ## ER図
-上記の利用用途に即して、以下の構造のRDBを設計しました。
+上記の利用用途を想定して、以下のRDBを設計・実装しました。
 ![](./database_diagram.png)
 
+## データフローの概要
+ER図に記載されたテーブルはそれぞれ以下のデータフローにより作成されています。
+![](./data_flow.png)
 ## データソース
 guestsとholidaysにはそれぞれ異なるAPIを使用しています。
 ### guests
