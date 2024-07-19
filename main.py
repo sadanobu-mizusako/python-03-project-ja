@@ -4,6 +4,7 @@ import sqlite3
 import requests
 import configparser
 import os
+import shutil
 
 # API情報
 con = configparser.ConfigParser()
@@ -228,6 +229,28 @@ def join_data_db(con):
     df_by_year = df_by_year.fillna(0).assign(holiday_cnt=lambda df: df.holiday_cnt.astype(int))
     return df_by_month, df_by_year
 
+def save_data_local(df_guests, df_holidays):
+    holiday_dir = "./data_holidays"
+    guest_dir = "./data_guests"
+
+    # 既存のディレクトリがあれば削除して再度作成
+    if os.path.exists(holiday_dir):
+        shutil.rmtree(holiday_dir)
+    if os.path.exists(guest_dir):
+        shutil.rmtree(guest_dir)
+
+    os.makedirs(holiday_dir)    
+    os.makedirs(guest_dir)
+
+    # 年度ごとにデータを分割して保存する
+    for year in df_guests.year_month.apply(lambda x: x[:4]).unique():
+        holiday_file = f"{holiday_dir}/{year}"
+        guest_file = f"{guest_dir}/{year}"
+        os.makedirs(holiday_file)
+        os.makedirs(guest_file)   
+        df_guests[df_guests.year_month.apply(lambda x: x[:4])==year].to_csv(guest_file+"/data.csv")
+        df_holidays[df_holidays.year_month.apply(lambda x: x[:4])==year].to_csv(holiday_file+"/data.csv")
+
 # UI関連の関数
 def get_option_or_query():
     ng_commands = ["delete", "insert", "update", "drop"]
@@ -235,6 +258,7 @@ def get_option_or_query():
         message = "\n実行したい処理を選択してください。"
         message += "\n 1:月毎の祝日数と宿泊者数を出力する"
         message += "\n 2:年毎の祝日数と宿泊者数を出力する"
+        message += "\n 3:データベースのデータをローカルに保存する"
         message += "\n 9:処理を終了する"
         message += "\n DBに対してクエリを実行したい場合は、直接クエリを記述してください。ただし、delete / insert / update / dropは禁止します"
         message += "\n"
@@ -253,14 +277,11 @@ def get_option_or_query():
     return option
         
 if __name__ == "__main__":
-    # pandasデータフレームの表示設定
-    pd.set_option('display.max_rows',1000)
-
-    # DBの準備
-    con = sqlite3.connect(DB_NAME)
-    df_guests, df_holidays = load_multi_data_sources()
-    store_data_db(df_guests, df_holidays, con)
-    df_by_month, df_by_year = join_data_db(con)
+    pd.set_option('display.max_rows',1000)# pandasデータフレームの表示設定
+    con = sqlite3.connect(DB_NAME)# DBの準備
+    df_guests, df_holidays = load_multi_data_sources()# データソースからデータを取得
+    store_data_db(df_guests, df_holidays, con)# データをDBに格納    
+    df_by_month, df_by_year = join_data_db(con)# DBのデータをジョインして副次テーブルを構築
 
     while True:
         option = get_option_or_query()
@@ -268,6 +289,8 @@ if __name__ == "__main__":
             print(df_by_month)
         elif option=="2":
             print(df_by_year)
+        elif option=="3":
+            save_data_local(df_guests, df_holidays)
         elif option=="9":
             break
         else:
