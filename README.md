@@ -7,6 +7,12 @@
 https://github.com/sadanobu-mizusako/python-03-project-ja
 ```
 
+## パッケージのインストール
+requests、pandasが必要になりますので、必要に応じてご自身の環境にインストールするようお願いします。以下のコードで一括インストールすることも可能です。
+```
+pip install -r requirements.txt
+```
+
 ## API認証情報の取得
 - RESASのAPIには認証キーが必要となります。
 - チームメンバー、講師の先生方は[こちら](https://drive.google.com/file/d/1yqpJDss3BeNUIjrkk1Zarp3bBXy2Sq1l/view?usp=drive_link)からconfig.iniをコピーしてお使いください。
